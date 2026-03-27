@@ -4,15 +4,19 @@
 Un sistema de cartografía avanzada que codifica y descodifica localizaciones y rutas con técnicas criptográficas y estructuras de datos geoespaciales. El objetivo es ofrecer un módulo Python que permita generar mapas cifrados, compartirlos con confianza y reconstruirlos en sistemas autorizados.
 
 ## Componentes
-- `core/codec.py`: codifica coordenadas (lat/lon) en tokens cifrados y decodifica con claves.
-- `core/mapper.py`: construye rutas, valida topología y guarda metadata segura.
-- `ui/console.py`: CLI mínima para encriptar/descifrar rutas y exportar.
-- `docs/`: especificaciones criptográficas, API y políticas de uso.
-- `tests/`: validaciones de codec, mapas y permisos.
+- `core/codec.py`: AES-GCM + HKDF para cifrar coordenadas y generar tokens B64 con nonce random.
+- `core/keyring.py`: gestor de keyrings cifrados que deriva claves maestras con scrypt/HKDF y guarda slots con metadata (`kid`, versión, salt).
+- `core/package.py`: genera "paquetes" que contienen ruta + mensaje, prepara envelope encryption y añade firmas HMAC-SHA256 (con auditoría).
+- `core/audit.py`: registro firmado (SHA-256/HMAC) por cada operación crítica para detectar manipulación y replay.
+- `ui/console.py`: CLI avanzada para rotar claves, cifrar/descifrar coordenadas o paquetes completos, e inspeccionar metadata.
+- `docs/`: especificaciones criptográficas, API, políticas y guías de uso/seguridad.
+- `tests/`: validaciones criptográficas del codec y del paquete.
 
-## Seguridad
-- Usa Fernet (AES-128) + HKDF para derivar claves por proyecto.
-- Incluye validaciones para evitar manipulación de coordenadas y timestamp/nonce contra duplicados.
+## Seguridad militar
+- Claves maestras derivadas con `scrypt` + sal única, y subclaves generadas con HKDF para cada uso (route, message, audit).
+- Cada paquete incluye timestamp, HMAC y nonce; la verificación rechaza firmas inválidas y detecta replay.
+- Auditoría firmada (SHA-256/HMAC) en `core/audit.py` impide manipulación silenciosa y proporciona cadena de custodia.
+- Rotación de claves y almacenamiento cifrado en `core/keyring.py` permite suspender slots comprometidos sin perder acceso a datos anteriores.
 
 ## Roadmap inicial
 1. Face 1: core codec + CLI + docs mínimos.
