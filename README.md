@@ -35,9 +35,9 @@ Diseñamos un sistema de cartografía de grado militar: cada coordenada, ruta y 
 - Mantén actualizados los tests en `tests/` (codec, package) y crea nuevos casos si amplías la capa criptográfica.
 
 ## Face 3 — Release automation
-- El workflow [Face 3 — Release automation](.github/workflows/face3-release.yml) recompila el CLI con PyInstaller y sube un ZIP como asset tras publicar un release.
-- Consulta `docs/RELEASES.md` para el proceso completo y para documentar qué perfiles se usaron.
-- El script `packaging/build-pyinstaller.sh` empaqueta `ui/console.py` junto con `core/` y `docs/` en un ejecutable multiplataforma.
+- El workflow [Face 3 — Release automation](.github/workflows/face3-release.yml) ahora compila la app con PyInstaller y sube automáticamente el ZIP recién generado como asset con permisos de escritura habilitados.
+- Mira `docs/RELEASES.md` para conocer el procedimiento exacto y qué perfiles se utilizaron en cada publicación.
+- El script `packaging/build-pyinstaller.sh` empaqueta `ui/console.py`, `core/` y `docs/` en un ejecutable multiplataforma.
 
 ## Cómo contribuir
 Sigue `CONTRIBUTING.md`: abre un issue, crea rama, ejecuta `ruff check core ui tests` y `pytest tests`, y lanza el PR indicando qué Face toca.
