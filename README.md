@@ -39,5 +39,11 @@ Diseñamos un sistema de cartografía de grado militar: cada coordenada, ruta y 
 - Mira `docs/RELEASES.md` para conocer el procedimiento exacto y qué perfiles se utilizaron en cada publicación.
 - El script `packaging/build-pyinstaller.sh` empaqueta `ui/console.py`, `core/` y `docs/` en un ejecutable multiplataforma.
 
+## Face 5 — Difusión y guía táctica
+- Publica casos reales en `docs/case-studies/mission-alpha.md` con JSON de packages (`mission-alpha.json`).
+- Usa `docs/CHEAT_SHEETS.md` para entrenar operadores con comandos de rotación, creación e inspección de paquetes.
+- Comparte el release `v0.9.0 – Secure Map Codec` y anota en `docs/COMMUNITY_GUIDE.md` la retroalimentación recibida.
+- Mantén `docs/STATUS.md` actualizado con las métricas de lanzamiento, auditorías y próximos pasos.
+
 ## Cómo contribuir
 Sigue `CONTRIBUTING.md`: abre un issue, crea rama, ejecuta `ruff check core ui tests` y `pytest tests`, y lanza el PR indicando qué Face toca.
