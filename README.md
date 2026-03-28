@@ -1,5 +1,7 @@
 # Secure Map Codec
 
+[![Face 2 Quality](https://github.com/Manuel-1312/secure-map/actions/workflows/face2-quality.yml/badge.svg)](https://github.com/Manuel-1312/secure-map/actions/workflows/face2-quality.yml)
+
 ## Visión extrema
 Diseñamos un sistema de cartografía de grado militar: cada coordenada, ruta y mensaje se cifra con capas de AES-GCM+HKDF y viaja acompañada de firmas HMAC, auditoría firmada y rotación de claves por slot. Nada se comparte sin un keyring cifrado y un log firmado.
 
@@ -22,6 +24,14 @@ Diseñamos un sistema de cartografía de grado militar: cada coordenada, ruta y 
 
 ## Roadmap de largo alcance
 - **Phase 1:** componentes core + CLI + docs de uso seguro.
-- **Phase 2:** tests, lint y scripts de contribución presente.
+- **Phase 2:** tests, lint y scripts de contribución (Face 2).
 - **Phase 3:** pipeline CI y empaquetado PyPI/CLI corporativo.
 - **Phase 4:** comunidad, casos de uso y monitoreo de seguridad.
+
+## Face 2 — Calidad y flujo cifrado
+- Agrega `requirements-dev.txt` y corre `pip install -r requirements-dev.txt` para preparar `ruff` y `pytest`.
+- El workflow [Face 2 — Calidad](.github/workflows/face2-quality.yml) valida el código en Ubuntu (ruff + pytest) antes de mergear cualquier PR.
+- Mantén actualizados los tests en `tests/` (codec, package) y crea nuevos casos si amplías la capa criptográfica.
+
+## Cómo contribuir
+Sigue `CONTRIBUTING.md`: abre un issue, crea rama, ejecuta `ruff check core ui tests` y `pytest tests`, y lanza el PR indicando qué Face toca.
