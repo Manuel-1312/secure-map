@@ -64,4 +64,4 @@ def inspect_package(pkg: Package, master_key: bytes, audit_key: bytes) -> Dict[s
     payload = _decrypt(pkg.envelope, derive_subkey(master_key, b"msg"))
     message, ts = payload.decode("utf-8").split("|")
     decoded = [decode(item["token"], route_key) for item in pkg.route]
-    return {"message": message, "timestamp": ts, "points": str(decoded)}
+    return {"message": message, "timestamp": ts, "points": decoded}
