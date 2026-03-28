@@ -1,6 +1,5 @@
 from __future__ import annotations
 import json
-import os
 from datetime import datetime
 from typing import Dict
 from cryptography.hazmat.primitives import hashes

@@ -1,4 +1,3 @@
-import os
 from core.codec import encode, decode
 
 def test_roundtrip_returns_same_point():

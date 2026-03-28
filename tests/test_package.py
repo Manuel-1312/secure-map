@@ -1,5 +1,4 @@
 from core.package import build_package, inspect_package, Package
-from core.keyring import derive_subkey
 
 def test_package_roundtrip():
     master = b"supersecretmasterkey1234567890"

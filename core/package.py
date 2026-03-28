@@ -38,7 +38,6 @@ def _decrypt(token: str, key: bytes) -> bytes:
 
 def build_package(points: List[Dict[str, float]], message: str, master_key: bytes, audit_key: bytes) -> Package:
     route_key = derive_subkey(master_key, b"route")
-    payload = b"|".join(encode(p['lat'], p['lon'], route_key).encode("utf-8") for p in points)
     timestamp = datetime.now(timezone.utc).isoformat()
     envelope = _encrypt(f"{message}|{timestamp}".encode("utf-8"), derive_subkey(master_key, b"msg"), b"envelope")
     route = [

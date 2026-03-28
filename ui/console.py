@@ -1,12 +1,12 @@
 from __future__ import annotations
 import typer
-from typing import List, Tuple
+from typing import List
 import json
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from core.codec import encode, decode
 from core.package import build_package, inspect_package, Package
-from core.keyring import create_slot, save_keyring, load_keyring, KeySlot
+from core.keyring import create_slot, save_keyring
 
 app = typer.Typer()
 
