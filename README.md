@@ -1,6 +1,7 @@
 # Secure Map Codec
 
 [![Face 2 Quality](https://github.com/Manuel-1312/secure-map/actions/workflows/face2-quality.yml/badge.svg)](https://github.com/Manuel-1312/secure-map/actions/workflows/face2-quality.yml)
+[![Face 3 Release](https://github.com/Manuel-1312/secure-map/actions/workflows/face3-release.yml/badge.svg)](https://github.com/Manuel-1312/secure-map/actions/workflows/face3-release.yml)
 
 ## Visión extrema
 Diseñamos un sistema de cartografía de grado militar: cada coordenada, ruta y mensaje se cifra con capas de AES-GCM+HKDF y viaja acompañada de firmas HMAC, auditoría firmada y rotación de claves por slot. Nada se comparte sin un keyring cifrado y un log firmado.
@@ -32,6 +33,11 @@ Diseñamos un sistema de cartografía de grado militar: cada coordenada, ruta y 
 - Agrega `requirements-dev.txt` y corre `pip install -r requirements-dev.txt` para preparar `ruff` y `pytest`.
 - El workflow [Face 2 — Calidad](.github/workflows/face2-quality.yml) valida el código en Ubuntu (ruff + pytest) antes de mergear cualquier PR.
 - Mantén actualizados los tests en `tests/` (codec, package) y crea nuevos casos si amplías la capa criptográfica.
+
+## Face 3 — Release automation
+- El workflow [Face 3 — Release automation](.github/workflows/face3-release.yml) recompila el CLI con PyInstaller y sube un ZIP como asset tras publicar un release.
+- Consulta `docs/RELEASES.md` para el proceso completo y para documentar qué perfiles se usaron.
+- El script `packaging/build-pyinstaller.sh` empaqueta `ui/console.py` junto con `core/` y `docs/` en un ejecutable multiplataforma.
 
 ## Cómo contribuir
 Sigue `CONTRIBUTING.md`: abre un issue, crea rama, ejecuta `ruff check core ui tests` y `pytest tests`, y lanza el PR indicando qué Face toca.

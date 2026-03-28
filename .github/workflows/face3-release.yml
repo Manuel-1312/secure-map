@@ -1,0 +1,32 @@
+name: Face 3 — Release automation
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt -r requirements-dev.txt
+      - name: Build executable
+        run: |
+          chmod +x packaging/build-pyinstaller.sh
+          packaging/build-pyinstaller.sh
+      - name: Package artifact
+        run: |
+          mkdir -p release-bin
+          zip -j release-bin/secure-map.zip dist/secure-map
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release-bin/secure-map.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
