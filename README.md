@@ -1,49 +1,27 @@
 # Secure Map Codec
 
-[![Face 2 Quality](https://github.com/Manuel-1312/secure-map/actions/workflows/face2-quality.yml/badge.svg)](https://github.com/Manuel-1312/secure-map/actions/workflows/face2-quality.yml)
-[![Face 3 Release](https://github.com/Manuel-1312/secure-map/actions/workflows/face3-release.yml/badge.svg)](https://github.com/Manuel-1312/secure-map/actions/workflows/face3-release.yml)
+> **Archivado.** Prototipo personal, sin mantenimiento. Es un ejercicio de criptografía aplicada y no tiene auditoría externa: no lo uses para proteger datos reales.
 
-## Visión extrema
-Diseñamos un sistema de cartografía de grado militar: cada coordenada, ruta y mensaje se cifra con capas de AES-GCM+HKDF y viaja acompañada de firmas HMAC, auditoría firmada y rotación de claves por slot. Nada se comparte sin un keyring cifrado y un log firmado.
+Cifra coordenadas y rutas en tokens y las empaqueta con firma, usando primitivas estándar de la librería `cryptography`.
 
-## Bajo el capó
-| Componente | Propósito |
+## Qué hay
+
+| Ruta | Contenido |
 | --- | --- |
-| `core/codec.py` | AES-GCM con HKDF para convertir coordenadas en tokens B64 con nonce aleatorio y metadata controlada. |
-| `core/keyring.py` | Genera y guarda keyrings cifrados con `scrypt` (master) + HKDF (slots), cada uno con un `kid` y versión. |
-| `core/package.py` | Arma paquetes de ruta+mensaje: envelope encryption + firma HMAC-SHA256 + timestamp + export para cliente. |
-| `core/audit.py` | Registra cada acción crítica con un HMAC firmado (SHA-256) para detectar manipulación y replay. |
-| `ui/console.py` | CLI confusa: rota claves, cifra/descifra, crea paquetes, inspecciona metadata y emite logs a prueba de guerra. |
-| `docs/` | Documentación de seguridad, casos, políticas y guías operativas (incluye `SECURITY.md`, `USAGE.md`). |
-| `tests/` | Validaciones del codec, keyring y paquetes cifrados para mantener invariantes criptográficos. |
+| `core/codec.py` | AES-GCM con clave derivada por HKDF; convierte coordenadas en tokens Base64 |
+| `core/keyring.py` | Keyring cifrado con clave maestra derivada por `scrypt` y slots rotables |
+| `core/package.py` | Paquete ruta + mensaje con cifrado de sobre, HMAC-SHA256 y timestamp |
+| `core/audit.py` | Log de acciones encadenado con HMAC para detectar manipulación |
+| `ui/console.py` | CLI para rotar claves, cifrar, descifrar e inspeccionar paquetes |
+| `tests/` | Tests del codec y de los paquetes |
 
-## Estrategia segura
-- Cada paquete lleva timestamp y HMAC; la verificación rechaza firmas inválidas y coteja el nonce para evitar replays.
-- Las claves maestras se derivan con `scrypt` + sal única, y se rotan generando nuevos slots con metadata protegida.
-- Todos los logs se firman con `core/audit.py`, creando cadenas de custodia que demuestran cualquier acceso.
-- No hay secretos en claro: el CLI `ui/console.py` solo opera pasando passphrases que derivan claves temporales.
+## Uso
 
-## Roadmap de largo alcance
-- **Phase 1:** componentes core + CLI + docs de uso seguro.
-- **Phase 2:** tests, lint y scripts de contribución (Face 2).
-- **Phase 3:** pipeline CI y empaquetado PyPI/CLI corporativo.
-- **Phase 4:** comunidad, casos de uso y monitoreo de seguridad.
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt -r requirements-dev.txt
+pytest tests
+python ui/console.py --help
+```
 
-## Face 2 — Calidad y flujo cifrado
-- Agrega `requirements-dev.txt` y corre `pip install -r requirements-dev.txt` para preparar `ruff` y `pytest`.
-- El workflow [Face 2 — Calidad](.github/workflows/face2-quality.yml) valida el código en Ubuntu (ruff + pytest) antes de mergear cualquier PR.
-- Mantén actualizados los tests en `tests/` (codec, package) y crea nuevos casos si amplías la capa criptográfica.
-
-## Face 3 — Release automation
-- El workflow [Face 3 — Release automation](.github/workflows/face3-release.yml) ahora compila la app con PyInstaller y sube automáticamente el ZIP recién generado como asset con permisos de escritura habilitados.
-- Mira `docs/RELEASES.md` para conocer el procedimiento exacto y qué perfiles se utilizaron en cada publicación.
-- El script `packaging/build-pyinstaller.sh` empaqueta `ui/console.py`, `core/` y `docs/` en un ejecutable multiplataforma.
-
-## Face 5 — Difusión y guía táctica
-- Publica casos reales en `docs/case-studies/mission-alpha.md` con JSON de packages (`mission-alpha.json`).
-- Usa `docs/CHEAT_SHEETS.md` para entrenar operadores con comandos de rotación, creación e inspección de paquetes.
-- Comparte el release `v0.9.0 – Secure Map Codec` y anota en `docs/COMMUNITY_GUIDE.md` la retroalimentación recibida.
-- Mantén `docs/STATUS.md` actualizado con las métricas de lanzamiento, auditorías y próximos pasos.
-
-## Cómo contribuir
-Sigue `CONTRIBUTING.md`: abre un issue, crea rama, ejecuta `ruff check core ui tests` y `pytest tests`, y lanza el PR indicando qué Face toca.
+Más detalle en `docs/USAGE.md` y `docs/SECURITY.md`.
